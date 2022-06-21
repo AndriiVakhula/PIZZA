@@ -7,9 +7,11 @@
     "preview": "vite preview --port 4173"
   },
   "dependencies": {
-    "pinia": "^2.0.14",
+    "axios": "^0.27.2",
+    "sass": "^1.52.3",
     "vue": "^3.2.36",
-    "vue-router": "^4.0.15"
+    "vue-router": "^4.0.15",
+    "vuex": "^4.0.2"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^2.3.3",
