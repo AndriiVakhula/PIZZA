@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="head-page">
-      <h1>Category</h1>
+      <h1 class="page-title">Category</h1>
 
       <modal-component v-if="showAddModal" @close="closeAddCategoryModal">
         <template v-slot:title> Add category </template>
@@ -120,17 +120,6 @@ h1 {
   margin-bottom: 40px;
 }
 
-.main-btn {
-  padding: 8px 24px;
-  background: #08b1ba;
-  border-radius: 4px;
-  font-style: normal;
-  font-weight: 400;
-  font-size: 16px;
-  line-height: 19px;
-  text-align: center;
-  color: #ffffff;
-}
 
 .input-item {
   display: flex;
@@ -152,7 +141,6 @@ h1 {
 }
 
 .category-item {
-  width: 100%;
   box-shadow: 0px 10px 13px rgba(17, 38, 146, 0.05);
   border-radius: 8px;
   background: #fff;

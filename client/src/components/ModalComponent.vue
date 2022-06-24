@@ -4,7 +4,7 @@
     <transition name="modal">
       <div class="modal active">
         <div class="modal-header">
-          <h3>
+          <h3 class="page-title">
             <slot name="title"></slot>
           </h3>
           <button class="close" @click="close">

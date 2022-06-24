@@ -1,0 +1,41 @@
+*, *:before, *:after {
+    box-sizing: border-box;
+}
+
+body {
+  font-family: 'Nunito', sans-serif!important;
+  margin: 0;
+}
+h1,h2,h3,h4,h5,p {
+    margin: 0;
+}
+
+a {
+    text-decoration: none;
+}
+
+ul {
+    list-style: none;
+    padding: 0;
+}
+
+.page-title {
+    color: $title-color;
+    font-size: 1.75rem;
+    font-weight: 700px;
+    line-height: 1.2;
+    margin-bottom: 0.5rem;
+}
+
+.main-btn {
+    box-shadow: 0 2px 4px 0 rgb(90 141 238 / 60%);
+    font-weight: 500;
+    color: $white;
+    background-color: $primary;
+    font-size: 1rem;
+    border-radius: 0.25rem;
+    border: none;
+    outline: none;
+    padding: 10px 25px;
+    cursor: pointer;
+}
