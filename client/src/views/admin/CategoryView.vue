@@ -7,7 +7,7 @@
         <template v-slot:title> Add category </template>
         <template v-slot:content>
           <form @submit.prevent="createCategoryHandler">
-            <div class="input-item">
+            <div class="form-group" :class="{ invalid: v$.newCategoryName.$errors.length }">
               <label for="category-name" class="form-label">Name</label>
               <input
                 type="text"
@@ -15,40 +15,38 @@
                 id="category-name"
                 v-model.trim="newCategoryName"
               />
+              <div
+                v-for="(error, index) of v$.newCategoryName.$errors"
+                :key="`error-${index}`"
+              >
+                <div class="error-message">{{ error.$message }}</div>
+              </div>
             </div>
             <div class="modal-footer d-flex">
               <button
-                class="second-btn ml-auto"
+                class="btn second-btn ml-auto"
                 @click.prevent="closeAddCategoryModal"
               >
                 Cancel
               </button>
-              <button type="submit" class="main-btn">Add</button>
+              <button type="submit" class="btn main-btn">Add</button>
             </div>
           </form>
         </template>
       </modal-component>
 
-      <button @click.prevent="openAddCategoryModal" class="main-btn">
+      <button @click.prevent="openAddCategoryModal" class="btn main-btn">
         Add category
       </button>
     </div>
 
     <div>
       <ul v-if="this.categories.length">
-        <li
+        <category-item
           v-for="category in categories"
           :key="category.id"
-          class="category-item"
-        >
-          <p>
-            {{ category.name }}
-          </p>
-
-          <button @click="deleteCategoryHandler(category.id)" class="circle-btn">
-            <ion-icon name="trash-outline"></ion-icon>
-          </button>
-        </li>
+          :category="category"
+        />
       </ul>
 
       <div v-else>No category</div>
@@ -58,8 +56,13 @@
 
 <script>
 import { mapActions, mapGetters } from "vuex";
+import { useVuelidate } from "@vuelidate/core";
+import { required } from "@vuelidate/validators";
 import ModalComponent from "../../components/ModalComponent.vue";
+import CategoryItem from "../../components/admin/CategoryItem.vue";
+
 export default {
+  setup: () => ({ v$: useVuelidate() }),
   mounted() {
     this.fetchCategories();
   },
@@ -69,8 +72,15 @@ export default {
       showAddModal: false,
     };
   },
+  validations() {
+    return {
+      newCategoryName: {
+        required,
+      },
+    };
+  },
   methods: {
-    ...mapActions(["fetchCategories", "addNewCategory", "deleteCategory"]),
+    ...mapActions(["fetchCategories", "addNewCategory"]),
     openAddCategoryModal() {
       this.showAddModal = true;
     },
@@ -78,6 +88,12 @@ export default {
       this.showAddModal = false;
     },
     createCategoryHandler() {
+      
+      if (this.v$.$invalid) {
+        this.v$.$touch();
+        return;
+      }
+
       const category = {
         name: this.newCategoryName,
       };
@@ -87,11 +103,6 @@ export default {
       this.newCategoryName = null;
       this.closeAddCategoryModal();
     },
-    deleteCategoryHandler(id) {
-      console.log(id)
-
-      this.deleteCategory(id);
-    },
   },
   computed: {
     ...mapGetters({
@@ -100,64 +111,10 @@ export default {
   },
   components: {
     ModalComponent,
+    CategoryItem,
   },
 };
 </script>
 
 <style scoped lang="scss">
-h1 {
-  font-style: normal;
-  font-weight: 700;
-  font-size: 22px;
-  line-height: 26px;
-  color: #181c25;
-}
-
-.head-page {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 40px;
-}
-
-
-.input-item {
-  display: flex;
-  flex-direction: column;
-
-  input {
-    padding: 8px 10px;
-    border: 1px solid #ccc;
-  }
-}
-
-.modal-footer {
-  display: flex;
-  justify-content: flex-end;
-  margin-top: 20px;
-  .main-btn {
-    margin-left: 10px;
-  }
-}
-
-.category-item {
-  box-shadow: 0px 10px 13px rgba(17, 38, 146, 0.05);
-  border-radius: 8px;
-  background: #fff;
-  padding: 20px 30px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-
-  &:not(:last-child) {
-    margin-bottom: 15px;
-  }
-}
-
-.circle-btn {
-  border-radius: 100%;
-  width: 30px;
-  height: 30px;
-  background-color: #f4f5f8;
-}
 </style>
