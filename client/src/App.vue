@@ -20,8 +20,6 @@ export default {
 }
 </script>
 
-<style>
-  body {
-    font-family: 'Lato', sans-serif;
-  }
+<style lang="scss">
+  @import '@/assets/styles/style.scss';
 </style>

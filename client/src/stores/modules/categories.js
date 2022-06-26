@@ -11,6 +11,12 @@ export default {
     addCategory(state, category) {
       state.categories.push(category);
     },
+    updateCategory(state, editCategory) {
+      const index = state.categories.findIndex(
+        (category) => category.id == editCategory.id
+      );
+      state.categories[index] = editCategory;
+    },
     removeCategory(state, categoryId) {
       const index = state.categories.findIndex(
         (category) => category.id == categoryId
@@ -33,18 +39,29 @@ export default {
       host
         .post("category", category)
         .then(({ data }) => {
-          commit('addCategory', data)
-          console.log(data);
+          commit("addCategory", data);
         })
         .catch((error) => {
           console.log(error);
         });
     },
-    deleteCategory({commit}, id) {
+    updateCategory({ commit }, category) {
+      host
+        .put(`category/${category.id}`, {
+          name: category.name,
+        })
+        .then(({ data }) => {
+          commit("updateCategory", data);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
+    deleteCategory({ commit }, id) {
       host
         .delete(`category/${id}`)
         .then((data) => {
-          commit('removeCategory', id)
+          commit("removeCategory", id);
         })
         .catch((error) => {
           console.log(error);

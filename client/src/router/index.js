@@ -19,7 +19,7 @@ const router = createRouter({
       component: DashboardView,
       meta: {
         layout: 'admin'
-      }
+      },
     },
     {
       path: '/admin/category',
