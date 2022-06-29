@@ -29,6 +29,14 @@ const router = createRouter({
         layout: 'admin'
       }
     },
+    {
+      path: '/admin/pizza',
+      name: 'AdminPizza',
+      component: () => import('../views/admin/PizzaView.vue'),
+      meta: {
+        layout: 'admin'
+      }
+    },
   ]
 })
 
