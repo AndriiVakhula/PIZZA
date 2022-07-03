@@ -8,11 +8,15 @@ import { PizzaEntity } from './pizza.entity';
 export class PizzaService {
     constructor(@InjectRepository(PizzaEntity) private readonly pizzaRepository: Repository<PizzaEntity>) { }
 
+    async findAll(): Promise<PizzaEntity[]> {
+        return await this.pizzaRepository.find();
+    }
 
-    async create(createPizzaDto: CreatePizzaDto): Promise<PizzaEntity> {
+    async create(createPizzaDto: CreatePizzaDto, file: Express.Multer.File): Promise<PizzaEntity> {
         const pizza = new PizzaEntity();
         Object.assign(pizza, createPizzaDto)
 
+        pizza.image = file.filename;
         return await this.pizzaRepository.save(pizza);
     }
 }

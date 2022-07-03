@@ -12,5 +12,8 @@ export class PizzaEntity {
     description: String
 
     @Column()
+    image: String
+
+    @Column()
     price: number
 }

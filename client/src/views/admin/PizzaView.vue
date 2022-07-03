@@ -28,6 +28,11 @@
             </div>
 
             <div class="form-group">
+              <label for="pizza-file" class="form-label">Image</label>
+              <input type="file" id="image" accept="image/jpeg, image/png" @change="fileSelected"/>
+            </div>
+
+            <div class="form-group">
               <label for="pizza-description" class="form-label"
                 >Description</label
               >
@@ -56,46 +61,67 @@
       </button>
     </div>
 
-    <div></div>
+    <div v-if="pizzas.length">
+      <pizza-item v-for="pizza of pizzas" :key="pizza.id" :pizza="pizza" />
+    </div>
+    <div v-else>
+      <div>No pizza</div>
+    </div>
   </div>
 </template>
 
 <script>
-import { mapActions } from "vuex"; 
+import { mapActions, mapGetters } from "vuex";
 import ModalComponent from "../../components/ModalComponent.vue";
-
+import PizzaItem from "../../components/admin/PizzaItem.vue";
 export default {
+  mounted() {
+    this.fetchPizzas();
+  },
   data() {
     return {
       showAddModal: false,
       newPizzaName: null,
       newPizzaPrice: null,
       newPizzaDescription: null,
+      newPizzaImage: null,
     };
   },
   methods: {
-    ...mapActions(["addNewPizza"]),
+    ...mapActions(["addNewPizza", "fetchPizzas"]),
     openAddPizzaModal() {
       this.showAddModal = true;
     },
     closeAddPizzaModal() {
       this.showAddModal = false;
     },
+     fileSelected(event) {
+      this.newPizzaImage = event.target.files[0];
+    },
     addNewPizzaHandler() {
       const pizza = {
         name: this.newPizzaName,
         price: this.newPizzaPrice,
-        description: this.newPizzaDescription
-      }
-      
+        description: this.newPizzaDescription,
+        image: this.newPizzaImage,
+      };
+
       this.addNewPizza(pizza);
       this.closeAddPizzaModal();
-    }
+    
+      // TODO:clear new pizza fields
+    },
+  },
+  computed: {
+    ...mapGetters({
+      pizzas: "allPizzas",
+    }),
   },
   components: {
     ModalComponent,
+    PizzaItem,
   },
-};  
+};
 </script>
 
 <style scoped lang="scss">
