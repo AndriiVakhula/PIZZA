@@ -1,7 +1,7 @@
-import {IsInt, IsNotEmpty, IsString } from "class-validator";
+import { IsInt, IsNotEmpty, IsString } from "class-validator";
 
 
-export class CreatePizzaDto {    
+export class CreatePizzaDto {
     @IsNotEmpty()
     @IsString()
     readonly name: String
@@ -14,4 +14,8 @@ export class CreatePizzaDto {
     @IsNotEmpty()
     @IsInt()
     readonly price: Number
+
+    @IsNotEmpty()
+    @IsInt()
+    readonly categoryId: number
 }

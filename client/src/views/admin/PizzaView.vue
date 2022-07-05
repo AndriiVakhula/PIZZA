@@ -27,6 +27,20 @@
               />
             </div>
 
+             <div class="form-group">
+              <label for="pizza-category" class="form-label">Category</label>
+              <select
+                class="form-control"
+                id="pizza-category"
+                v-model="newPizzaCategoryId"
+              >
+                <option value="" disabled>Select category</option>
+                <option v-for="category in categories" :value="category.id" :key="category.id">
+                  {{ category.name }}
+                </option>
+              </select>
+            </div>
+
             <div class="form-group">
               <label for="pizza-file" class="form-label">Image</label>
               <input type="file" id="image" accept="image/jpeg, image/png" @change="fileSelected"/>
@@ -77,6 +91,9 @@ import PizzaItem from "../../components/admin/PizzaItem.vue";
 export default {
   mounted() {
     this.fetchPizzas();
+    if(!this.categories.length) {
+      this.fetchCategories();
+    }
   },
   data() {
     return {
@@ -85,10 +102,11 @@ export default {
       newPizzaPrice: null,
       newPizzaDescription: null,
       newPizzaImage: null,
+      newPizzaCategoryId: null,
     };
   },
   methods: {
-    ...mapActions(["addNewPizza", "fetchPizzas"]),
+    ...mapActions(["addNewPizza", "fetchPizzas", "fetchCategories"]),
     openAddPizzaModal() {
       this.showAddModal = true;
     },
@@ -104,17 +122,22 @@ export default {
         price: this.newPizzaPrice,
         description: this.newPizzaDescription,
         image: this.newPizzaImage,
+        categoryId: this.newPizzaCategoryId,
       };
 
       this.addNewPizza(pizza);
       this.closeAddPizzaModal();
     
-      // TODO:clear new pizza fields
+      this.newPizzaName = null;
+      this.newPizzaPrice = null;
+      this.newPizzaDescription = null;
+      this.newPizzaImage = null;
     },
   },
   computed: {
     ...mapGetters({
       pizzas: "allPizzas",
+      categories: "allCategories",
     }),
   },
   components: {

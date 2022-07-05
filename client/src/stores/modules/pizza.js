@@ -10,7 +10,13 @@ export default {
         },
         setPizza(state, pizzas) {
             state.pizza = pizzas;
-        }
+        },
+        removePizza(state, pizzaId) {
+            const index = state.pizza.findIndex(
+              (pizza) => pizza.id == pizzaId
+            );
+            state.pizza.splice(index, 1);
+        },
     },
     actions: {
         fetchPizzas({ commit }) {
@@ -34,6 +40,15 @@ export default {
             .then(({data}) => {
                 console.log(data);
                 commit('addPizza', data)
+            })
+            .catch((error) => {
+                console.log(error)
+            })
+        },
+        deletePizza({commit}, id) {
+            host.delete(`pizza/${id}`)
+            .then(({data}) => {
+                commit('removePizza', id)
             })
             .catch((error) => {
                 console.log(error)

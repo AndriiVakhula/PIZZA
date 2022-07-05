@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post, UploadedFile, UseInterceptors } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, UploadedFile, UseInterceptors } from '@nestjs/common';
 import { diskStorage } from 'multer';
 import * as path from 'path';
 import { FileInterceptor } from '@nestjs/platform-express';
@@ -26,7 +26,12 @@ export class PizzaController {
             fileFilter: imageFileFilter,
         })
     )
-    async create(@Body() createPizzaDto: CreatePizzaDto,  @UploadedFile() file: Express.Multer.File): Promise<PizzaEntity> {
+    async create(@Body() createPizzaDto: CreatePizzaDto, @UploadedFile() file: Express.Multer.File): Promise<PizzaEntity> {
         return await this.pizzaService.create(createPizzaDto, file);
+    }
+
+    @Delete(':id')
+    async delete(@Param('id') id: number) {
+        return await this.pizzaService.delete(id);
     }
 }
