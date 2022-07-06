@@ -40,7 +40,7 @@
       </button>
     </div>
 
-    <div>
+    <div v-if="!loading">
       <ul v-if="this.categories.length">
         <category-item
           v-for="category in categories"
@@ -51,6 +51,8 @@
 
       <div v-else>No category</div>
     </div>
+    <loader-component v-else/>
+
   </div>
 </template>
 
@@ -59,6 +61,7 @@ import { mapActions, mapGetters } from "vuex";
 import { useVuelidate } from "@vuelidate/core";
 import { required } from "@vuelidate/validators";
 import ModalComponent from "../../components/ModalComponent.vue";
+import LoaderComponent from "../../components/LoaderComponent.vue";
 import CategoryItem from "../../components/admin/CategoryItem.vue";
 
 export default {
@@ -107,11 +110,13 @@ export default {
   computed: {
     ...mapGetters({
       categories: "allCategories",
+      loading: "loading",
     }),
   },
   components: {
     ModalComponent,
     CategoryItem,
+    LoaderComponent,
   },
 };
 </script>

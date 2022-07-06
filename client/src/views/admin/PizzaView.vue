@@ -27,7 +27,7 @@
               />
             </div>
 
-             <div class="form-group">
+            <div class="form-group">
               <label for="pizza-category" class="form-label">Category</label>
               <select
                 class="form-control"
@@ -35,7 +35,11 @@
                 v-model="newPizzaCategoryId"
               >
                 <option value="" disabled>Select category</option>
-                <option v-for="category in categories" :value="category.id" :key="category.id">
+                <option
+                  v-for="category in categories"
+                  :value="category.id"
+                  :key="category.id"
+                >
                   {{ category.name }}
                 </option>
               </select>
@@ -43,7 +47,12 @@
 
             <div class="form-group">
               <label for="pizza-file" class="form-label">Image</label>
-              <input type="file" id="image" accept="image/jpeg, image/png" @change="fileSelected"/>
+              <input
+                type="file"
+                id="image"
+                accept="image/jpeg, image/png"
+                @change="fileSelected"
+              />
             </div>
 
             <div class="form-group">
@@ -75,23 +84,28 @@
       </button>
     </div>
 
-    <div v-if="pizzas.length">
-      <pizza-item v-for="pizza of pizzas" :key="pizza.id" :pizza="pizza" />
+    <div v-if="!loading">
+      <div v-if="pizzas.length">
+        <pizza-item v-for="pizza of pizzas" :key="pizza.id" :pizza="pizza" />
+      </div>
+      <div v-else>
+        <div>No pizza</div>
+      </div>
     </div>
-    <div v-else>
-      <div>No pizza</div>
-    </div>
+    <loader-component v-else/>
   </div>
 </template>
 
 <script>
 import { mapActions, mapGetters } from "vuex";
 import ModalComponent from "../../components/ModalComponent.vue";
+import LoaderComponent from "../../components/LoaderComponent.vue";
 import PizzaItem from "../../components/admin/PizzaItem.vue";
+
 export default {
   mounted() {
     this.fetchPizzas();
-    if(!this.categories.length) {
+    if (!this.categories.length) {
       this.fetchCategories();
     }
   },
@@ -113,7 +127,7 @@ export default {
     closeAddPizzaModal() {
       this.showAddModal = false;
     },
-     fileSelected(event) {
+    fileSelected(event) {
       this.newPizzaImage = event.target.files[0];
     },
     addNewPizzaHandler() {
@@ -127,7 +141,7 @@ export default {
 
       this.addNewPizza(pizza);
       this.closeAddPizzaModal();
-    
+
       this.newPizzaName = null;
       this.newPizzaPrice = null;
       this.newPizzaDescription = null;
@@ -136,12 +150,14 @@ export default {
   },
   computed: {
     ...mapGetters({
+      loading: "loading",
       pizzas: "allPizzas",
       categories: "allCategories",
     }),
   },
   components: {
     ModalComponent,
+    LoaderComponent,
     PizzaItem,
   },
 };

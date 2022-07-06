@@ -6,6 +6,7 @@
         <p class="pizza-name"><span>Name:</span> {{ pizza.name }}</p>
         <p class="pizza-price"><span>Price:</span> {{ pizza.price }} $</p>
       </div>
+        <p class="pizza-category"><span>Category:</span> {{pizza.category.name}}</p>
       <p class="pizza-description">
         <span>Description:</span> {{ pizza.description }}
       </p>
@@ -71,6 +72,7 @@ export default {
     display: flex;
   }
 
+  .pizza-price,
   .pizza-name {
     margin-right: 50px;
   }

@@ -20,6 +20,8 @@ export default {
     },
     actions: {
         fetchPizzas({ commit }) {
+            commit("startLoading");
+            
             host.get("/pizza")
             .then(({data}) => {
                 commit("setPizza", data);
@@ -27,8 +29,13 @@ export default {
             .catch(err => {
                 console.log(err);
             })
+            .finally(() => {
+                commit("stopLoading");
+            });
         },
         addNewPizza({commit}, pizza) {
+            commit("startLoading");
+
             const formData = new FormData();
 
             formData.append("name", pizza.name);
@@ -44,8 +51,13 @@ export default {
             .catch((error) => {
                 console.log(error)
             })
+            .finally(() => {
+                commit("stopLoading");
+            });
         },
         deletePizza({commit}, id) {
+            commit("startLoading");
+
             host.delete(`pizza/${id}`)
             .then(({data}) => {
                 commit('removePizza', id)
@@ -53,6 +65,9 @@ export default {
             .catch((error) => {
                 console.log(error)
             })
+            .finally(() => {
+                commit("stopLoading");
+            });
         }
     },
     getters: {

@@ -26,6 +26,7 @@ export default {
   },
   actions: {
     fetchCategories({ commit }) {
+      commit("startLoading");
       host
         .get("category")
         .then(({ data }) => {
@@ -33,9 +34,15 @@ export default {
         })
         .catch((error) => {
           console.log(error);
+        })
+        .finally(() => {
+          // console.log('test')
+          commit("stopLoading");
         });
     },
     addNewCategory({ commit }, category) {
+      commit("startLoading");
+
       host
         .post("category", category)
         .then(({ data }) => {
@@ -43,9 +50,14 @@ export default {
         })
         .catch((error) => {
           console.log(error);
+        })
+        .finally(() => {
+          commit("stopLoading");
         });
     },
     updateCategory({ commit }, category) {
+      commit("startLoading");
+
       host
         .put(`category/${category.id}`, {
           name: category.name,
@@ -55,9 +67,14 @@ export default {
         })
         .catch((error) => {
           console.log(error);
+        })
+        .finally(() => {
+          commit("stopLoading");
         });
     },
     deleteCategory({ commit }, id) {
+      commit("startLoading");
+
       host
         .delete(`category/${id}`)
         .then((data) => {
@@ -65,6 +82,9 @@ export default {
         })
         .catch((error) => {
           console.log(error);
+        })
+        .finally(() => {
+          commit("stopLoading");
         });
     },
   },
