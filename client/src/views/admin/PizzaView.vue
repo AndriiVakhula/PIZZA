@@ -7,7 +7,10 @@
         <template v-slot:title> Add pizza </template>
         <template v-slot:content>
           <form @submit.prevent="addNewPizzaHandler">
-            <div class="form-group">
+            <div
+              class="form-group"
+              :class="{ invalid: v$.newPizzaName.$errors.length }"
+            >
               <label for="pizza-name" class="form-label">Name</label>
               <input
                 type="text"
@@ -15,9 +18,18 @@
                 id="pizza-name"
                 v-model="newPizzaName"
               />
+              <div
+                v-for="(error, index) of v$.newPizzaName.$errors"
+                :key="`error-${index}`"
+              >
+                <div class="error-message">{{ error.$message }}</div>
+              </div>
             </div>
 
-            <div class="form-group">
+            <div
+              class="form-group"
+              :class="{ invalid: v$.newPizzaPrice.$errors.length }"
+            >
               <label for="pizza-price" class="form-label">Price</label>
               <input
                 type="text"
@@ -25,9 +37,18 @@
                 id="pizza-price"
                 v-model="newPizzaPrice"
               />
+              <div
+                v-for="(error, index) of v$.newPizzaPrice.$errors"
+                :key="`error-${index}`"
+              >
+                <div class="error-message">{{ error.$message }}</div>
+              </div>
             </div>
 
-            <div class="form-group">
+            <div
+              class="form-group"
+              :class="{ invalid: v$.newPizzaCategoryId.$errors.length }"
+            >
               <label for="pizza-category" class="form-label">Category</label>
               <select
                 class="form-control"
@@ -43,9 +64,18 @@
                   {{ category.name }}
                 </option>
               </select>
+              <div
+                v-for="(error, index) of v$.newPizzaName.$errors"
+                :key="`error-${index}`"
+              >
+                <div class="error-message">{{ error.$message }}</div>
+              </div>
             </div>
 
-            <div class="form-group">
+            <div
+              class="form-group"
+              :class="{ invalid: v$.newPizzaImage.$errors.length }"
+            >
               <label for="pizza-file" class="form-label">Image</label>
               <input
                 type="file"
@@ -53,9 +83,18 @@
                 accept="image/jpeg, image/png"
                 @change="fileSelected"
               />
+              <div
+                v-for="(error, index) of v$.newPizzaImage.$errors"
+                :key="`error-${index}`"
+              >
+                <div class="error-message">{{ error.$message }}</div>
+              </div>
             </div>
 
-            <div class="form-group">
+            <div
+              class="form-group"
+              :class="{ invalid: v$.newPizzaDescription.$errors.length }"
+            >
               <label for="pizza-description" class="form-label"
                 >Description</label
               >
@@ -64,6 +103,12 @@
                 id="pizza-description"
                 v-model="newPizzaDescription"
               ></textarea>
+              <div
+                v-for="(error, index) of v$.newPizzaDescription.$errors"
+                :key="`error-${index}`"
+              >
+                <div class="error-message">{{ error.$message }}</div>
+              </div>
             </div>
 
             <div class="modal-footer d-flex">
@@ -92,17 +137,20 @@
         <div>No pizza</div>
       </div>
     </div>
-    <loader-component v-else/>
+    <loader-component v-else />
   </div>
 </template>
 
 <script>
 import { mapActions, mapGetters } from "vuex";
+import { useVuelidate } from "@vuelidate/core";
+import { required, numeric } from "@vuelidate/validators";
 import ModalComponent from "../../components/ModalComponent.vue";
 import LoaderComponent from "../../components/LoaderComponent.vue";
 import PizzaItem from "../../components/admin/PizzaItem.vue";
 
 export default {
+  setup: () => ({ v$: useVuelidate() }),
   mounted() {
     this.fetchPizzas();
     if (!this.categories.length) {
@@ -119,6 +167,26 @@ export default {
       newPizzaCategoryId: null,
     };
   },
+  validations() {
+    return {
+      newPizzaName: {
+        required,
+      },
+      newPizzaPrice: {
+        required,
+        numeric,
+      },
+      newPizzaDescription: {
+        required,
+      },
+      newPizzaImage: {
+        required,
+      },
+      newPizzaCategoryId: {
+        required,
+      },
+    };
+  },
   methods: {
     ...mapActions(["addNewPizza", "fetchPizzas", "fetchCategories"]),
     openAddPizzaModal() {
@@ -131,6 +199,11 @@ export default {
       this.newPizzaImage = event.target.files[0];
     },
     addNewPizzaHandler() {
+      if (this.v$.$invalid) {
+        this.v$.$touch();
+        return;
+      }
+
       const pizza = {
         name: this.newPizzaName,
         price: this.newPizzaPrice,
