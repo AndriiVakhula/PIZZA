@@ -17,6 +17,12 @@
           <p>Category</p>
         </router-link>
       </li>
+       <li class="nav-item">
+        <router-link :to="{ name: 'AdminPizza' }">
+          <ion-icon name="pizza"></ion-icon>
+          <p>Pizza</p>
+        </router-link>
+      </li>
     </ul>
   </aside>
 </template>

@@ -79,6 +79,7 @@ ul {
   display: flex;
   flex-direction: column;
   position: relative;
+  margin-bottom: 15px;
 
   label {
     font-size: 1rem;
@@ -87,6 +88,8 @@ ul {
     color: #607080;
   }
 
+  select,
+  textarea,
   input {
     display: block;
     width: 100%;
